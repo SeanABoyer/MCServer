@@ -135,9 +135,12 @@ resource "aws_instance" "mc_server" {
 
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
-  ebs_block_device {
-    device_name = "/dev/sda1"
+  root_block_device {
     volume_size = 16
+    tags = {
+    Name = "Minecraft-${random_uuid.server_name.result}"
+    Game = "Minecraft"
+  }
   }
   provisioner "file" {
     source      = "installMCServerViaLinuxGSM.sh"
