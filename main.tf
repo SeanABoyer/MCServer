@@ -10,7 +10,7 @@ data "aws_ami" "debian" {
   most_recent = true
   filter {
     name   = "name"
-    values = ["debian-*"]
+    values = ["debian-11-*"]
   }
   owners = ["136693071363"] #Debian Buster [https://wiki.debian.org/Cloud/AmazonEC2Image/Buster]
 }
