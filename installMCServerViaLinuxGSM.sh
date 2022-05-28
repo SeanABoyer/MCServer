@@ -20,8 +20,8 @@ sudo apt-add-repository contrib
 sudo apt-add-repository non-free
 sudo dpkg --add-architecture i386
 sudo apt update -y
-echo steam steam/question select "I AGREE" | sudo debconf-set-selections
-echo steam steam/license note '' | sudo debconf-set-selections
+#echo steam steam/question select "I AGREE" | sudo debconf-set-selections
+#echo steam steam/license note '' | sudo debconf-set-selections
 sudo apt install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat openjdk-17-jre -y
 finishLog "Installing Packages"
 
