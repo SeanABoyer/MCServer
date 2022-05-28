@@ -11,18 +11,13 @@ finishLog () {
 }
 
 startLog "Updating System"
+sudo dpkg --add-architecture i386
 sudo apt-get update -y
+sudo apt-get upgrade -y
 finishLog "Updating System"
 
 startLog "Installing Packages"
-sudo apt-get install software-properties-common -y
-sudo apt-add-repository contrib
-sudo apt-add-repository non-free
-sudo dpkg --add-architecture i386
-sudo apt update -y
-#echo steam steam/question select "I AGREE" | sudo debconf-set-selections
-#echo steam steam/license note '' | sudo debconf-set-selections
-sudo apt install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat openjdk-17-jre -y
+sudo apt install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat openjdk-17-jre lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 -y
 finishLog "Installing Packages"
 
 startLog "Creating User and Changing User"
@@ -30,6 +25,18 @@ sudo useradd mcserver -p $password -m
 sudo chown -R mcserver:mcserver /home/mcserver
 finishLog "Creating User and Changing User"
 
-startLog "Download linuxgsm.sh and install server"
-sudo -H -u mcserver bash -c "cd ~ && wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh mcserver && yes | ./mcserver install && ./mcserver start"
+startLog "Download linuxgsm.sh install server"
+sudo -H -u mcserver bash -c "cd ~ && wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh mcserver && yes"
+sudo -H -u mcserver bash -c "cd ~ && ./mcserver install"
 finishLog "Download linuxgsm.sh and install server"
+
+startLog "Config server"
+#Reduce Max Players to 10 players.
+sudo -H -u mcserver bash -c "sed -i 's/max-players=20/max-players=10/g' ./serverfiles/server.properties"
+#Change How much Ram the JVM Runs on                                /home/mcserver/lgsm/config-lgsm/mcserver
+sudo -H -u mcserver bash -c "echo 'javaram="3072"' >> ./lgsm/config-lgsm/mcserver/common.cfg"
+finishLog "Config server"
+
+startLog "Start server"
+sudo -H -u mcserver bash -c "cd ~ && ./mcserver start"
+finishLog "Start server"
