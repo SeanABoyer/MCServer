@@ -100,6 +100,13 @@ resource "aws_security_group" "security_group" {
     protocol = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    description = "MCServer Port"
+    from_port = 25565
+    to_port = 25565
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   #Allow all outbound
   egress {
     from_port = 0

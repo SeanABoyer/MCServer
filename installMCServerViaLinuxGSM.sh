@@ -17,7 +17,7 @@ sudo apt-get upgrade -y
 finishLog "Updating System"
 
 startLog "Installing Packages"
-sudo apt install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat openjdk-17-jre lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 -y
+sudo apt-get install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat openjdk-17-jre lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 -y
 finishLog "Installing Packages"
 
 startLog "Creating User and Changing User"
