@@ -120,11 +120,11 @@ resource "aws_security_group" "security_group" {
   }
 }
 
-data aws_route53_zone "rootDomain"{
+data aws_route53_zone "DNSZone"{
   name = "seanboyer.us"
 }
-resource aws_route53_record {
-  zone_id = aws_route53_zone.rootDomain.zone_id
+resource aws_route53_record  "mcDNSRecord" {
+  zone_id = aws_route53_zone.DNSZone.zone_id
   name = "mc.seanboyer.us"
   type = "A"
 
