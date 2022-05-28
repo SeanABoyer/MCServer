@@ -135,29 +135,29 @@ resource "aws_instance" "mc_server" {
 
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
-  provisioner "file" {
-    source      = "installMCServerViaLinuxGSM.sh"
-    destination = "/tmp/installScript.sh"
+  # provisioner "file" {
+  #   source      = "installMCServerViaLinuxGSM.sh"
+  #   destination = "/tmp/installScript.sh"
 
-    connection {
-      type = "ssh"
-      private_key = var.private_ssh_key
-      user = var.ssh_user
-      host = self.public_ip
-    }
-  }
+  #   connection {
+  #     type = "ssh"
+  #     private_key = var.private_ssh_key
+  #     user = var.ssh_user
+  #     host = self.public_ip
+  #   }
+  # }
 
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/installScript.sh",
-      "/tmp/installScript.sh ${var.password} >> /tmp/installScript.txt",
-    ]
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "chmod +x /tmp/installScript.sh",
+  #     "/tmp/installScript.sh ${var.password} >> /tmp/installScript.txt",
+  #   ]
 
-    connection {
-      type = "ssh"
-      private_key = var.private_ssh_key
-      user = var.ssh_user
-      host = self.public_ip
-    }
-  }
+  #   connection {
+  #     type = "ssh"
+  #     private_key = var.private_ssh_key
+  #     user = var.ssh_user
+  #     host = self.public_ip
+  #   }
+  # }
 }
