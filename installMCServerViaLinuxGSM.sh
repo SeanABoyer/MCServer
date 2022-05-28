@@ -32,9 +32,9 @@ finishLog "Download linuxgsm.sh and install server"
 
 startLog "Config server"
 #Reduce Max Players to 10 players.
-sudo -H -u mcserver bash -c "sed -i 's/max-players=20/max-players=10/g' ./serverfiles/server.properties"
+sudo -H -u mcserver bash -c "cd ~ && sed -i 's/max-players=20/max-players=10/g' ./serverfiles/server.properties"
 #Change How much Ram the JVM Runs on                                /home/mcserver/lgsm/config-lgsm/mcserver
-sudo -H -u mcserver bash -c "echo 'javaram="3072"' >> ./lgsm/config-lgsm/mcserver/common.cfg"
+sudo -H -u mcserver bash -c "cd ~ && echo 'javaram="3072"' >> ./lgsm/config-lgsm/mcserver/common.cfg"
 finishLog "Config server"
 
 startLog "Start server"
