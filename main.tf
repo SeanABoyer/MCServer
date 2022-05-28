@@ -135,6 +135,10 @@ resource "aws_instance" "mc_server" {
 
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
+  ebs_block_device {
+    device_name = "/dev/sda1"
+    volume_size = 16
+  }
   provisioner "file" {
     source      = "installMCServerViaLinuxGSM.sh"
     destination = "/tmp/installScript.sh"
