@@ -120,6 +120,20 @@ resource "aws_security_group" "security_group" {
   }
 }
 
+data aws_route53_zone "rootDomain"{
+  name = "seanboyer.us"
+}
+resource aws_route53_record {
+  zone_id = aws_route53_zone.rootDomain.zone_id
+  name = "mc.seanboyer.us"
+  type = "A"
+
+  records = [
+    aws_eip.eip.public_ip
+  ]
+
+}
+
 /*
  Network End
 */
