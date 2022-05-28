@@ -124,10 +124,9 @@ data aws_route53_zone "DNSZone"{
   name = "seanboyer.us"
 }
 resource aws_route53_record  "mcDNSRecord" {
-  zone_id = aws_route53_zone.DNSZone.zone_id
+  zone_id = data.aws_route53_zone.DNSZone.zone_id
   name = "mc.seanboyer.us"
   type = "A"
-
   records = [
     aws_eip.eip.public_ip
   ]
