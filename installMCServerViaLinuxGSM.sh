@@ -26,8 +26,8 @@ sudo chown -R mcserver:mcserver /home/mcserver
 finishLog "Creating User and Changing User"
 
 startLog "Download linuxgsm.sh install server"
-sudo -H -u mcserver bash -c "cd ~ && wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh mcserver && yes"
-sudo -H -u mcserver bash -c "cd ~ && ./mcserver install"
+sudo -H -u mcserver bash -c "cd ~ && wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh mcserver "
+sudo -H -u mcserver bash -c "cd ~ && yes | ./mcserver install"
 finishLog "Download linuxgsm.sh and install server"
 
 startLog "Config server"
