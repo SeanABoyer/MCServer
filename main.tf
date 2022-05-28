@@ -136,7 +136,7 @@ resource "aws_instance" "mc_server" {
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
   root_block_device {
-    volume_size = 16
+    volume_size = 32
     tags = {
     Name = "Minecraft-${random_uuid.server_name.result}"
     Game = "Minecraft"
