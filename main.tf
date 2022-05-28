@@ -127,6 +127,7 @@ resource aws_route53_record  "mcDNSRecord" {
   zone_id = data.aws_route53_zone.DNSZone.zone_id
   name = "mc.seanboyer.us"
   type = "A"
+  ttl = "300"
   records = [
     aws_eip.eip.public_ip
   ]
