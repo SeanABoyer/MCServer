@@ -4,6 +4,10 @@ terraform {
 
 provider "aws" {
   region = "us-west-2"
+  default_tags {
+    Name = "Minecraft-${random_uuid.server_name.result}"
+    Game = "Minecraft"
+  }
 }
 
 data "aws_ami" "debian" {
@@ -21,10 +25,7 @@ resource "aws_key_pair" "ssh_key" {
   key_name = "mc_ssh_key"
   public_key = var.public_ssh_key
 
-  tags = {
-    Name = "Minecraft-${random_uuid.server_name.result}"
-    Game = "Minecraft"
-  }
+  
 }
 
 
@@ -33,19 +34,10 @@ resource "aws_key_pair" "ssh_key" {
 */ 
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr_block
-  tags = {
-      Name = "Minecraft-${random_uuid.server_name.result}"
-      Game = "Minecraft"
-  }
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
-
-  tags = {
-      Name = "Minecraft-${random_uuid.server_name.result}"
-      Game = "Minecraft"
-  }
 }
 
 resource "aws_route" "route_ign_to_vpc" {
@@ -63,11 +55,7 @@ resource "aws_subnet" "subnet" {
   map_public_ip_on_launch = true
 
 
-    depends_on = [aws_internet_gateway.gw]
-  tags = {
-      Name = "Minecraft-${random_uuid.server_name.result}"
-      Game = "Minecraft"
-  }
+  depends_on = [aws_internet_gateway.gw]
 }
 
 resource "aws_eip" "eip" {
@@ -75,11 +63,6 @@ resource "aws_eip" "eip" {
   vpc = true
   associate_with_private_ip = "10.0.1.100"
   depends_on                = [aws_internet_gateway.gw]
-
-  tags = {
-    Name = "Minecraft-${random_uuid.server_name.result}"
-    Game = "Minecraft"
-  }
 }
 
 resource "aws_security_group" "security_group" {
@@ -114,10 +97,6 @@ resource "aws_security_group" "security_group" {
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = {
-      Name = "Minecraft-${random_uuid.server_name.result}"
-      Game = "Minecraft"
-  }
 }
 
 data aws_route53_zone "DNSZone"{
@@ -145,11 +124,6 @@ resource "aws_instance" "mc_server" {
 
   private_ip = "10.0.1.100"
 
-  tags = {
-    Name = "Minecraft-${random_uuid.server_name.result}"
-    Game = "Minecraft"
-  }
-
   subnet_id = aws_subnet.subnet.id
 
   key_name = "mc_ssh_key"
@@ -158,10 +132,6 @@ resource "aws_instance" "mc_server" {
 
   root_block_device {
     volume_size = 64
-    tags = {
-    Name = "Minecraft-${random_uuid.server_name.result}"
-    Game = "Minecraft"
-  }
   }
   provisioner "file" {
     source      = "installMCServerViaLinuxGSM.sh"
@@ -188,4 +158,20 @@ resource "aws_instance" "mc_server" {
       host = self.public_ip
     }
   }
+}
+
+# Add Record to dynamodb table
+data "aws_dynamodb_table" "DBtable" {
+  name = "ManageableEC2Instances"
+}
+resource "aws_dynamodb_table_item" "dynamodbEntry" {
+  table_name = aws_dynamodb_table.DBtable.name
+  hash_key = aws_dynamodb_table.DBtable.hash_key
+
+  item = jsonencode(
+    {
+      "ec2ID":"${aws_instance.mc_server.id}",
+      "dnsName": "${aws_route53_record.mcDNSRecord.name}"
+    }
+  )
 }
