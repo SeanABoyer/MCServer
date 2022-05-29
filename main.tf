@@ -118,12 +118,25 @@ resource aws_route53_record  "mcDNSRecord" {
 /*
  Network End
 */
+data "aws_iam_policy_document" "AmazonSSMFullAccess"{
+  name = "AmazonSSMFullAccess"
+}
+
+resource "aws_iam_role" "mcServerRole" {
+  name = "Minecraft-${random_uuid.server_name.result}"
+  assume_role_policy = data.aws_iam_policy_document.AmazonSSMFullAccess.policy.json
+}
+
+resource "aws_iam_instance_profile" "mcServerInstanceProfile" {
+  name = "Minecraft-${random_uuid.server_name.result}"
+  role = aws_iam_role.mcServerRole.name
+}
 
 resource "aws_instance" "mc_server" {
   ami           = data.aws_ami.debian.id
   availability_zone = "us-west-2a"
   instance_type = "t2.medium"
-
+  iam_instance_profile = aws_iam_instance_profile.mcServerInstanceProfile.name
   private_ip = "10.0.1.100"
 
   subnet_id = aws_subnet.subnet.id
