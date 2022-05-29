@@ -167,8 +167,8 @@ data "aws_dynamodb_table" "DBtable" {
   name = "ManageableEC2Instances"
 }
 resource "aws_dynamodb_table_item" "dynamodbEntry" {
-  table_name = aws_dynamodb_table.DBtable.name
-  hash_key = aws_dynamodb_table.DBtable.hash_key
+  table_name = data.aws_dynamodb_table.DBtable.name
+  hash_key = data.aws_dynamodb_table.DBtable.hash_key
 
   item = jsonencode(
     {
