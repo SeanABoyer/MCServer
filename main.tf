@@ -122,13 +122,26 @@ data "aws_iam_policy" "AmazonSSMFullAccess"{
   name = "AmazonSSMFullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "AttachSSMFullAccess" {
-  role = aws_iam_role.mcServerRole.name
-  policy_arn = data.aws_iam_policy.AmazonSSMFullAccess.policy.arn
-}
-
 resource "aws_iam_role" "mcServerRole" {
   name = "Minecraft-${random_uuid.server_name.result}"
+  managed_policy_arns =[
+    aws_iam_policy.AmazonSSMFullAccess
+    ]
+    assume_role_policy = jsonencode(
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+          }
+        ]
+      }
+    )
 }
 
 resource "aws_iam_instance_profile" "mcServerInstanceProfile" {
