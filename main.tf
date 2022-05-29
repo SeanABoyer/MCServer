@@ -122,9 +122,13 @@ data "aws_iam_policy" "AmazonSSMFullAccess"{
   name = "AmazonSSMFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "AttachSSMFullAccess" {
+  role = aws_iam_role.mcServerRole.name
+  policy_arn = data.aws_iam_policy.AmazonSSMFullAccess.policy.arn
+}
+
 resource "aws_iam_role" "mcServerRole" {
   name = "Minecraft-${random_uuid.server_name.result}"
-  assume_role_policy = data.aws_iam_policy.AmazonSSMFullAccess.policy.json
 }
 
 resource "aws_iam_instance_profile" "mcServerInstanceProfile" {
