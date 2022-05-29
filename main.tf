@@ -118,13 +118,13 @@ resource aws_route53_record  "mcDNSRecord" {
 /*
  Network End
 */
-data "aws_iam_policy_document" "AmazonSSMFullAccess"{
+data "aws_iam_policy" "AmazonSSMFullAccess"{
   name = "AmazonSSMFullAccess"
 }
 
 resource "aws_iam_role" "mcServerRole" {
   name = "Minecraft-${random_uuid.server_name.result}"
-  assume_role_policy = data.aws_iam_policy_document.AmazonSSMFullAccess.policy.json
+  assume_role_policy = data.aws_iam_policy.AmazonSSMFullAccess.policy.json
 }
 
 resource "aws_iam_instance_profile" "mcServerInstanceProfile" {
