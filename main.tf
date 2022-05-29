@@ -5,8 +5,10 @@ terraform {
 provider "aws" {
   region = "us-west-2"
   default_tags {
-    Name = "Minecraft-${random_uuid.server_name.result}"
-    Game = "Minecraft"
+    tags = {
+      Name = "Minecraft-${random_uuid.server_name.result}"
+      Game = "Minecraft"
+    }
   }
 }
 
