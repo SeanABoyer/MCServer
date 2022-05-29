@@ -125,7 +125,7 @@ data "aws_iam_policy" "AmazonSSMFullAccess"{
 resource "aws_iam_role" "mcServerRole" {
   name = "Minecraft-${random_uuid.server_name.result}"
   managed_policy_arns =[
-    aws_iam_policy.AmazonSSMFullAccess
+    data.aws_iam_policy.AmazonSSMFullAccess
     ]
     assume_role_policy = jsonencode(
       {
