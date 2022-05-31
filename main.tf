@@ -26,8 +26,6 @@ resource "random_uuid" "server_name" {}
 resource "aws_key_pair" "ssh_key" {
   key_name = "mc_ssh_key"
   public_key = var.public_ssh_key
-
-  
 }
 
 
@@ -109,10 +107,7 @@ resource aws_route53_record  "mcDNSRecord" {
   name = "mc.seanboyer.us"
   type = "A"
   ttl = "300"
-  records = [
-    aws_eip.eip.public_ip
-  ]
-
+  records = [aws_eip.eip.public_ip]
 }
 
 /*
@@ -166,7 +161,7 @@ resource "aws_instance" "mc_server" {
     volume_size = 64
   }
   provisioner "file" {
-    source      = "installMCServerViaLinuxGSM.sh"
+    source      = "installScript.sh"
     destination = "/tmp/installScript.sh"
 
     connection {
@@ -203,7 +198,9 @@ resource "aws_dynamodb_table_item" "dynamodbEntry" {
   item = jsonencode(
     {
       "ec2ID":{"S":"${aws_instance.mc_server.id}"},
-      "dnsName":{"S":"${aws_route53_record.mcDNSRecord.name}"}
+      "dnsName":{"S":"${aws_route53_record.mcDNSRecord.name}"},
+      "startCommand":"cd ~ && ./mcserver start",
+      "stopCommand":"cd ~ && ./mcserver stop"
     }
   )
 }
