@@ -200,7 +200,7 @@ resource "aws_dynamodb_table_item" "dynamodbEntry" {
       "ec2ID":{"S":"${aws_instance.mc_server.id}"},
       "dnsName":{"S":"${aws_route53_record.mcDNSRecord.name}"},
       "startCommand":"cd ~ && ./mcserver start",
-      "stopCommand":"cd ~ && ./mcserver stop"
+      "stopCommand":"cd ~ && ./mcserver stop",
     }
   )
 }
